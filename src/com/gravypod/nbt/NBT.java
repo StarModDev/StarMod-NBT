@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import javax.naming.spi.DirStateFactory.Result;
-
 import com.gravypod.nbt.types.NBTByte;
 import com.gravypod.nbt.types.NBTInt;
 import com.gravypod.nbt.types.NBTList;

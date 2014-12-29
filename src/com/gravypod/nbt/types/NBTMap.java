@@ -3,7 +3,6 @@ package com.gravypod.nbt.types;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -48,10 +47,9 @@ public class NBTMap extends NBT<Map<String, NBT<?>>> {
 
 		channel.writeInt(length);
 
-		Iterator<Entry<String, NBT<?>>> iterator = getValue().entrySet().iterator();
-
-		for (Entry<String, NBT<?>> entry = iterator.next(); iterator.hasNext(); entry = iterator.next()) {
-			channel.writeUTF(entry.getKey());
+		for (Entry<String, NBT<?>> entry : getValue().entrySet()) {
+            System.out.println(entry.getKey());
+            channel.writeUTF(entry.getKey());
 			NBT.writeNBTChannel(channel, entry.getValue());
 		}
 
