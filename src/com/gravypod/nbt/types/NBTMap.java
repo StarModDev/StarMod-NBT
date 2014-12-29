@@ -53,7 +53,7 @@ public class NBTMap extends NBT<Map<String, NBT<?>>> {
 		}
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T> T get(String key) {
 		return (T) getValue().get(key);
