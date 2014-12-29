@@ -7,26 +7,26 @@ import java.io.RandomAccessFile;
 
 public class NBTString extends NBT<String> {
 
-    public NBTString() {
-        this("");
-    }
+	public NBTString() {
+		this("");
+	}
 
-    public NBTString(RandomAccessFile channel) throws IOException {
-        super(STRING, channel);
-    }
+	public NBTString(RandomAccessFile channel) throws IOException {
+		super(STRING, channel);
+	}
 
-    public NBTString(String value) {
-        super(STRING);
-        setValue(value);
-    }
+	public NBTString(String value) {
+		super(STRING);
+		setValue(value);
+	}
 
-    @Override
-    protected void loadPayload(RandomAccessFile channel) throws IOException {
-        setValue(channel.readUTF());
-    }
+	@Override
+	protected void loadPayload(RandomAccessFile channel) throws IOException {
+		setValue(channel.readUTF());
+	}
 
-    @Override
-    protected void savePayload(RandomAccessFile channel) throws IOException {
-        channel.writeUTF(getValue());
-    }
+	@Override
+	protected void savePayload(RandomAccessFile channel) throws IOException {
+		channel.writeUTF(getValue());
+	}
 }

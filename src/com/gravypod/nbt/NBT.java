@@ -55,10 +55,10 @@ public abstract class NBT<T> {
 	 * Datatype constant for {@link NBTMap}
 	 */
 	public static final byte MAP = 8;
-    /**
-     * Datatype constant for {@link String}
-     */
-    public static final byte STRING = 9;
+	/**
+	 * Datatype constant for {@link String}
+	*/
+	public static final byte STRING = 9;
 
 	private T value;
 	private final byte type;
@@ -133,11 +133,11 @@ public abstract class NBT<T> {
 			NBT<T> result = (NBT<T>) new NBTMap(channel);
 			return result;
 		}
-        case STRING: {
-            @SuppressWarnings("unchecked")
-            NBT<T> result = (NBT<T>) new NBTString(channel);
-            return result;
-        }
+        	case STRING: {
+            		@SuppressWarnings("unchecked")
+            		NBT<T> result = (NBT<T>) new NBTString(channel);
+            		return result;
+        	}
 		default:
 			throw new IllegalStateException("Data in RandomAccessFile corrupt. No type found.");
 		}
