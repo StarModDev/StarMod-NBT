@@ -59,6 +59,14 @@ public abstract class NBT<T> {
 	 * Datatype constant for {@link String}
 	*/
 	public static final byte STRING = 9;
+	/**
+	 * Datatype constant for {@link javax.vecmath.Vector3f}
+	 */
+	public static final byte VECTOR3F = 10;
+	/**
+	 * Datatype constant for {@link org.starmod.util.Vector3i}
+	 */
+	public static final byte VECTOR3I = 11;
 
 	private T value;
 	private final byte type;
