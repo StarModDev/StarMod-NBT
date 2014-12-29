@@ -1,33 +1,41 @@
 package com.gravypod.nbt.types;
 
 import com.gravypod.nbt.NBT;
+import com.gravypod.nbt.NBTInputStream;
+import com.gravypod.nbt.NBTOutputStream;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
-public class NBTBoolean extends NBT<Boolean> {
+public class NBTBoolean implements NBT<Boolean> {
 
-	public NBTBoolean() {
-		this(false);
+	private Boolean value;
+
+	public NBTBoolean(Boolean value) {
+		this.value = value;
 	}
 
-	public NBTBoolean(RandomAccessFile channel) throws IOException {
-		super(BOOLEAN, channel);
-	}
-
-	public NBTBoolean(boolean value) {
-		super(BOOLEAN);
-		setValue(value);
+	public NBTBoolean(NBTInputStream in) throws IOException {
+		this.value = in.readBoolean();
 	}
 
 	@Override
-	protected void loadPayload(RandomAccessFile channel) throws IOException {
-		setValue(channel.readBoolean());
+	public byte getId() {
+		return TagType.BOOLEAN.getId();
 	}
 
 	@Override
-	protected void savePayload(RandomAccessFile channel) throws IOException {
-		channel.writeBoolean(getValue());
+	public Boolean getValue() {
+		return value;
+	}
+
+	@Override
+	public void setValue(Boolean value) {
+		this.value = value;
+	}
+
+	@Override
+	public void write(NBTOutputStream out) throws IOException {
+		out.writeBoolean(value);
 	}
 
 }

@@ -1,33 +1,41 @@
 package com.gravypod.nbt.types;
 
 import com.gravypod.nbt.NBT;
+import com.gravypod.nbt.NBTInputStream;
+import com.gravypod.nbt.NBTOutputStream;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
-public class NBTFloat extends NBT<Float> {
+public class NBTFloat implements NBT<Float> {
 
-	public NBTFloat() {
-		this(0F);
+	private Float value;
+
+	public NBTFloat(Float value) {
+		this.value = value;
 	}
 
-	public NBTFloat(RandomAccessFile channel) throws IOException {
-		super(FLOAT, channel);
-	}
-
-	public NBTFloat(float value) {
-		super(FLOAT);
-		setValue(value);
+	public NBTFloat(NBTInputStream in) throws IOException {
+		this.value = in.readFloat();
 	}
 
 	@Override
-	protected void loadPayload(RandomAccessFile channel) throws IOException {
-		setValue(channel.readFloat());
+	public byte getId() {
+		return TagType.FLOAT.getId();
 	}
 
 	@Override
-	protected void savePayload(RandomAccessFile channel) throws IOException {
-		channel.writeFloat(getValue());
+	public Float getValue() {
+		return value;
+	}
+
+	@Override
+	public void setValue(Float value) {
+		this.value = value;
+	}
+
+	@Override
+	public void write(NBTOutputStream out) throws IOException {
+		out.writeFloat(value);
 	}
 
 }

@@ -1,33 +1,41 @@
 package com.gravypod.nbt.types;
 
 import com.gravypod.nbt.NBT;
+import com.gravypod.nbt.NBTInputStream;
+import com.gravypod.nbt.NBTOutputStream;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
-public class NBTLong extends NBT<Long> {
+public class NBTLong implements NBT<Long> {
 
-	public NBTLong() {
-		this(0L);
+	private Long value;
+
+	public NBTLong(Long value) {
+		this.value = value;
 	}
 
-	public NBTLong(RandomAccessFile channel) throws IOException {
-		super(LONG, channel);
-	}
-
-	public NBTLong(long value) {
-		super(LONG);
-		setValue(value);
+	public NBTLong(NBTInputStream in) throws IOException {
+		this.value = in.readLong();
 	}
 
 	@Override
-	protected void loadPayload(RandomAccessFile channel) throws IOException {
-		setValue(channel.readLong());
+	public byte getId() {
+		return TagType.LONG.getId();
 	}
 
 	@Override
-	protected void savePayload(RandomAccessFile channel) throws IOException {
-		channel.writeLong(getValue());
+	public Long getValue() {
+		return value;
+	}
+
+	@Override
+	public void setValue(Long value) {
+		this.value = value;
+	}
+
+	@Override
+	public void write(NBTOutputStream out) throws IOException {
+		out.writeLong(value);
 	}
 
 }

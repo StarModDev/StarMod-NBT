@@ -1,32 +1,41 @@
 package com.gravypod.nbt.types;
 
 import com.gravypod.nbt.NBT;
+import com.gravypod.nbt.NBTInputStream;
+import com.gravypod.nbt.NBTOutputStream;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
-public class NBTString extends NBT<String> {
+public class NBTString implements NBT<String> {
 
-	public NBTString() {
-		this("");
-	}
-
-	public NBTString(RandomAccessFile channel) throws IOException {
-		super(STRING, channel);
-	}
+	private String value;
 
 	public NBTString(String value) {
-		super(STRING);
-		setValue(value);
+		this.value = value;
+	}
+
+	public NBTString(NBTInputStream in) throws IOException {
+		this.value = in.readUTF();
 	}
 
 	@Override
-	protected void loadPayload(RandomAccessFile channel) throws IOException {
-		setValue(channel.readUTF());
+	public byte getId() {
+		return TagType.STRING.getId();
 	}
 
 	@Override
-	protected void savePayload(RandomAccessFile channel) throws IOException {
-		channel.writeUTF(getValue());
+	public String getValue() {
+		return value;
 	}
+
+	@Override
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	@Override
+	public void write(NBTOutputStream out) throws IOException {
+		out.writeUTF(value);
+	}
+
 }

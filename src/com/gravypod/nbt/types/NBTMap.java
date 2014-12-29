@@ -1,64 +1,65 @@
 package com.gravypod.nbt.types;
 
+import com.gravypod.nbt.NBT;
+import com.gravypod.nbt.NBTInputStream;
+import com.gravypod.nbt.NBTOutputStream;
+
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import com.gravypod.nbt.NBT;
+public class NBTMap implements NBT<Map<String, NBT>> {
 
-public class NBTMap extends NBT<Map<String, NBT<?>>> {
+	private Map<String, NBT> value;
 
-	public NBTMap() {
-		this(new HashMap<String, NBT<?>>());
+	public NBTMap(Map<String, NBT> value) {
+		this.value = value;
 	}
 
-	public NBTMap(RandomAccessFile channel) throws IOException {
-		super(MAP, channel);
+	public NBTMap(NBTInputStream in) throws IOException {
+		this.value = new HashMap<>();
+		int size = in.readInt();
+		for (int i = 0; i < size; i++) {
+			String name = in.readUTF();
+			NBT tag = in.readTag();
+			addTag(name, tag);
+		}
 	}
 
-	public NBTMap(Map<String, NBT<?>> value) {
-		super(MAP);
-		setValue(value);
+	public void addTag(String name, NBT tag) {
+		value.put(name, tag);
+	}
+
+	public NBT getTag(String name) {
+		return value.get(name);
+	}
+
+	public void removeTag(String name) {
+		value.remove(name);
 	}
 
 	@Override
-	protected void loadPayload(RandomAccessFile channel) throws IOException {
-
-		if (getValue() == null) {
-			setValue(new HashMap<String, NBT<?>>());
-		}
-
-		int length = channel.readInt();
-
-		for (int i = 0; i < length; i++) {
-			String key = channel.readUTF();
-			NBT<?> val = NBT.readNBTChannel(channel);
-			getValue().put(key, val);
-		}
-
+	public byte getId() {
+		return TagType.MAP.getId();
 	}
 
 	@Override
-	protected void savePayload(RandomAccessFile channel) throws IOException {
+	public Map<String, NBT> getValue() {
+		return value;
+	}
 
-		int length = getValue().size();
+	@Override
+	public void setValue(Map<String, NBT> value) {
+		this.value = value;
+	}
 
-		channel.writeInt(length);
-
-		for (Entry<String, NBT<?>> entry : getValue().entrySet()) {
-			channel.writeUTF(entry.getKey());
-			NBT.writeNBTChannel(channel, entry.getValue());
+	@Override
+	public void write(NBTOutputStream out) throws IOException {
+		out.writeInt(value.size());
+		for (Map.Entry<String, NBT> tag : value.entrySet()) {
+			out.writeUTF(tag.getKey());
+			out.writeTag(tag.getValue());
 		}
-
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T get(String key) {
-		return (T) getValue().get(key);
-	}
-	public void put(String key, NBT<?> value) {
-		getValue().put(key, value);
-	}
 }
