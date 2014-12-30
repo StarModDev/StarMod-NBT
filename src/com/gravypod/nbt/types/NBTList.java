@@ -8,32 +8,41 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NBTList implements NBT<List<NBT>> {
+public class NBTList implements NBT<List<Object>> {
 
-	private List<NBT> value;
+	private byte type;
+	private List<Object> value;
 
-	public NBTList(List<NBT> value) {
+	public NBTList(List<Object> value) {
 		this.value = value;
+		try {
+			if (!value.isEmpty())
+				this.type = TagType.getTag(value.get(0)).getId();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public NBTList(NBTInputStream in) throws IOException {
 		this.value = new ArrayList<>();
 		int size = in.readInt();
+		this.type = in.readByte();
+		TagType tagType = TagType.valueOf(type);
 		for (int i = 0; i < size; i++) {
-			NBT tag = in.readTag();
-			addTag(tag);
+			Object obj = in.readTag(tagType).getValue();
+			add(obj);
 		}
 	}
 
-	public void addTag(NBT tag) {
+	public void add(Object tag) {
 		value.add(tag);
 	}
 
-	public NBT getTag(int index) {
+	public Object get(int index) {
 		return value.get(index);
 	}
 
-	public void removeTag(NBT tag) {
+	public void remove(Object tag) {
 		value.remove(tag);
 	}
 
@@ -43,20 +52,21 @@ public class NBTList implements NBT<List<NBT>> {
 	}
 
 	@Override
-	public List<NBT> getValue() {
+	public List<Object> getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(List<NBT> value) {
+	public void setValue(List<Object> value) {
 		this.value = value;
 	}
 
 	@Override
 	public void write(NBTOutputStream out) throws IOException {
 		out.writeInt(value.size());
-		for (NBT tag : value) {
-			out.writeTag(tag);
+		out.writeByte(type);
+		for (Object obj : value) {
+			out.writeTag(TagType.getTag(obj), false);
 		}
 	}
 

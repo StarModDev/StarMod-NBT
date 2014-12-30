@@ -11,7 +11,13 @@ public class NBTOutputStream extends DataOutputStream {
 	}
 
 	public void writeTag(NBT tag) throws IOException {
-		this.writeByte(tag.getId());
+		writeTag(tag, true);
+	}
+
+	public void writeTag(NBT tag, boolean id) throws IOException {
+		if (id) {
+			this.writeByte(tag.getId());
+		}
 		tag.write(this);
 	}
 
