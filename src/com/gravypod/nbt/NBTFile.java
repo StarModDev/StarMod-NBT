@@ -12,13 +12,27 @@ import java.io.IOException;
 public class NBTFile {
 
 	private File file;
+	private boolean newFile;
 
 	public NBTFile(File file) {
+		File parentDir = file.getParentFile();
+		if (!parentDir.exists()) parentDir.mkdir();
+		if (!file.exists()) try {
+			file.createNewFile();
+			newFile = true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		else newFile = false;
 		this.file = file;
 	}
 
 	public NBTFile(String path) {
-		this.file = new File(path);
+		this(new File(path));
+	}
+
+	public boolean isNewFile() {
+		return newFile;
 	}
 
 	public Object[] read() throws IOException {

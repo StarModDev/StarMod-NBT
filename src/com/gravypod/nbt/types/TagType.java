@@ -1,9 +1,10 @@
 package com.gravypod.nbt.types;
 
 import com.gravypod.nbt.NBT;
-import com.gravypod.nbt.Vector3i;
+import org.starmod.api.world.Location;
+import org.starmod.api.world.Sector;
+import org.starmod.api.world.StarSystem;
 
-import javax.vecmath.Vector3f;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -22,8 +23,9 @@ public enum TagType {
 	LIST(7, NBTList.class, List.class),
 	MAP(8, NBTMap.class, Map.class),
 	STRING(9, NBTString.class, String.class),
-	VECTOR3F(10, NBTVector3f.class, Vector3f.class),
-	VECTOR3I(11, NBTVector3i.class, Vector3i.class);
+	LOCATION(10, NBTLocation.class, Location.class),
+	SECTOR(11, NBTSector.class, Sector.class),
+	STAR_SYSTEM(12, NBTStarSystem.class, StarSystem.class);
 
 	private static final Map<Class, TagType> classTypes;
 	private static final Map<Byte, TagType> types;
