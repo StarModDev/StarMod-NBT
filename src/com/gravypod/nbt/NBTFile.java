@@ -16,7 +16,7 @@ public class NBTFile {
 
 	public NBTFile(File file) {
 		File parentDir = file.getParentFile();
-		if (!parentDir.exists()) parentDir.mkdir();
+		if (!parentDir.exists()) parentDir.mkdirs();
 		if (!file.exists()) try {
 			file.createNewFile();
 			newFile = true;
